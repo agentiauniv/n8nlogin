@@ -113,25 +113,26 @@ if (isset($_GET["logout"])) {
                 return;
             }
 
-            fetch("fetch("https://n8n-9-dtnb.onrender.com/webhook/student-log"
-                 { 
-                // ⚠️ Mets ta Production URL ici
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    question: question,
-                    student_id: "<?php echo $_SESSION["student_id"]; ?>"
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("response").innerText = data.response ?? "Pas de réponse.";
-            })
-            .catch(error => {
-                document.getElementById("response").innerText = "Erreur serveur.";
-            });
+            fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        question: question,
+        student_id: "<?php echo $_SESSION["student_id"]; ?>"
+    })
+})
+.then(res => res.json())
+.then(data => {
+    document.getElementById("response").innerText =
+        JSON.stringify(data);
+})
+.catch(error => {
+    document.getElementById("response").innerText =
+        "Erreur serveur.";
+});
+
         }
     </script>
 
@@ -139,5 +140,6 @@ if (isset($_GET["logout"])) {
 
 </body>
 </html>
+
 
 
