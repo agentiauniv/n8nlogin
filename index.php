@@ -113,7 +113,7 @@ if (isset($_GET["logout"])) {
                 return;
             }
 
-            fetch("fetch("https://n8n-4-yky9.onrender.com/webhook/student-log"
+            fetch("fetch("https://n8n-9-dtnb.onrender.com/webhook/student-log"
                  { 
                 // ⚠️ Mets ta Production URL ici
                 method: "POST",
@@ -139,4 +139,5 @@ if (isset($_GET["logout"])) {
 
 </body>
 </html>
+
 
