@@ -112,8 +112,7 @@ if (isset($_GET["logout"])) {
                 document.getElementById("response").innerText = "Veuillez entrer une question.";
                 return;
             }
-
-            fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
+fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -125,8 +124,15 @@ if (isset($_GET["logout"])) {
 })
 .then(res => res.json())
 .then(data => {
-    document.getElementById("response").innerText =
-        JSON.stringify(data);
+
+    if (data.imageUrl) {
+        document.getElementById("response").innerHTML =
+            "<img src='" + data.imageUrl + "' width='500'>";
+    } else {
+        document.getElementById("response").innerText =
+            JSON.stringify(data);
+    }
+
 })
 .catch(error => {
     document.getElementById("response").innerText =
@@ -140,6 +146,7 @@ if (isset($_GET["logout"])) {
 
 </body>
 </html>
+
 
 
 
