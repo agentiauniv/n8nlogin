@@ -123,11 +123,13 @@ fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
     })
 })
 .then(res => res.json())
-.then(data => {
+..then(data => {
 
-    if (data.imageUrl) {
+    console.log(data); // pour debug
+
+    if (data[0] && data[0].imageUrl) {
         document.getElementById("response").innerHTML =
-            "<img src='" + data.imageUrl + "' width='500'>";
+            "<img src='" + data[0].imageUrl + "' width='500'>";
     } else {
         document.getElementById("response").innerText =
             JSON.stringify(data);
@@ -146,6 +148,7 @@ fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
 
 </body>
 </html>
+
 
 
 
