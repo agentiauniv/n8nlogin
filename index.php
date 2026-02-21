@@ -103,37 +103,50 @@ if (isset($_GET["logout"])) {
 
     <div id="response" style="margin-top:20px; font-weight:bold;"></div>
 
-    <script>
-        function sendQuestion() {
+   <script>
+function sendQuestion() {
 
-            let question = document.getElementById("question").value;
+    let question = document.getElementById("question").value;
 
-            if (!question) {
-                document.getElementById("response").innerText = "Veuillez entrer une question.";
-                return;
-            }
+    if (!question) {
+        document.getElementById("response").innerText = "Veuillez entrer une question.";
+        return;
+    }
 
-            fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    question: question,
-                    student_id: "<?php echo $_SESSION["student_id"]; ?>"
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("response").innerText = JSON.stringify(data);
-            })
-            .catch(error => {
-                document.getElementById("response").innerText = "Erreur serveur.";
-            });
+    fetch("https://n8n-4-yky9.onrender.com/webhook-test/student-log", { // ✅ pas webhook-test
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            question: question,
+            student_id: "<?php echo $_SESSION["student_id"]; ?>"
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        console.log("Réponse reçue :", data);
+
+        if (data.imageUrl) {
+            document.getElementById("response").innerHTML =
+                "<img src='" + data.imageUrl + "' width='800' style='margin-top:20px; border:1px solid #ccc;'>";
+        } else {
+            document.getElementById("response").innerText =
+                "Image non trouvée.";
         }
-    </script>
+
+    })
+    .catch(error => {
+        console.error("Erreur :", error);
+        document.getElementById("response").innerText =
+            "Erreur serveur.";
+    });
+}
+</script>
 
 <?php endif; ?>
 
 </body>
 </html>
+
