@@ -1,15 +1,13 @@
 <?php
 session_start();
 
-/* ==============================
-   CONFIGURATION SUPABASE
-================================= */
-$project_url = "https://uhqqzlpaybcyxrepisgi.supabase.co";
-$api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocXF6bHBheWJjeXhyZXBpc2dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4NDAyNzgsImV4cCI6MjA4NjQxNjI3OH0.LNQMIQs7euI7-4MMJWU_maqT6WdXq6lWuueCtF3kE24"; // ⚠️ Mets ta clé ici
+/* ============================== CONFIGURATION SUPABASE ================================= */
 
-/* ==============================
-   LOGIN SUPABASE
-================================= */
+$project_url = "https://uhqqzlpaybcyxrepisgi.supabase.co";
+$api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocXF6bHBheWJjeXhyZXBpc2dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4NDAyNzgsImV4cCI6MjA4NjQxNjI3OH0.LNQMIQs7euI7-4MMJWU_maqT6WdXq6lWuueCtF3kE24";
+
+/* ============================== LOGIN SUPABASE ================================= */
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
 
     $email = trim($_POST["email"]);
@@ -30,11 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     curl_close($ch);
 
     $data = json_decode($response, true);
+
     $login_success = false;
 
     if (is_array($data)) {
         foreach ($data as $user) {
-
             if (
                 trim($user["email"]) === $email &&
                 trim($user["password"]) === $password_input
@@ -52,9 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     }
 }
 
-/* ==============================
-   LOGOUT
-================================= */
+/* ============================== LOGOUT ================================= */
+
 if (isset($_GET["logout"])) {
     session_destroy();
     header("Location: index.php");
@@ -67,11 +64,13 @@ if (isset($_GET["logout"])) {
 <head>
     <title>Agent IA Université</title>
 </head>
+
 <body>
 
 <?php if (!isset($_SESSION["student_id"])): ?>
 
     <!-- ================= LOGIN ================= -->
+
     <h2>Connexion Étudiant</h2>
 
     <?php if (isset($error_message)) echo "<p>$error_message</p>"; ?>
@@ -91,6 +90,7 @@ if (isset($_GET["logout"])) {
 <?php else: ?>
 
     <!-- ================= CHAT ================= -->
+
     <h2>Bienvenue <?php echo htmlspecialchars($_SESSION["email"]); ?></h2>
     <a href="?logout=1">Déconnexion</a>
 
@@ -112,35 +112,24 @@ if (isset($_GET["logout"])) {
                 document.getElementById("response").innerText = "Veuillez entrer une question.";
                 return;
             }
-fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        question: question,
-        student_id: "<?php echo $_SESSION["student_id"]; ?>"
-    })
-})
-.then(res => res.json())
-..then(data => {
 
-    console.log(data); // pour debug
-
-    if (data[0] && data[0].imageUrl) {
-        document.getElementById("response").innerHTML =
-            "<img src='" + data[0].imageUrl + "' width='500'>";
-    } else {
-        document.getElementById("response").innerText =
-            JSON.stringify(data);
-    }
-
-})
-.catch(error => {
-    document.getElementById("response").innerText =
-        "Erreur serveur.";
-});
-
+            fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    question: question,
+                    student_id: "<?php echo $_SESSION["student_id"]; ?>"
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("response").innerText = JSON.stringify(data);
+            })
+            .catch(error => {
+                document.getElementById("response").innerText = "Erreur serveur.";
+            });
         }
     </script>
 
@@ -148,8 +137,3 @@ fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
 
 </body>
 </html>
-
-
-
-
-
