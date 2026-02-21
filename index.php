@@ -123,17 +123,38 @@ if (isset($_GET["logout"])) {
                     student_id: "<?php echo $_SESSION["student_id"]; ?>"
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("response").innerText = JSON.stringify(data);
-            })
-            .catch(error => {
-                document.getElementById("response").innerText = "Erreur serveur.";
-            });
+           .then(response => response.text()) // on récupère brut
+    .then(text => {
+
+        console.log("Texte reçu :", text);
+
+        let data;
+
+        try {
+            data = JSON.parse(text); // on convertit en JSON
+        } catch (e) {
+            document.getElementById("response").innerText = text;
+            return;
         }
+
+        if (data.imageUrl) {
+            document.getElementById("response").innerHTML =
+                "<img src='" + data.imageUrl + "' width='900' style='margin-top:20px; border:2px solid #ccc;'>";
+        } else {
+            document.getElementById("response").innerText =
+                "Image non trouvée.";
+        }
+
+    })
+    .catch(error => {
+        document.getElementById("response").innerText =
+            "Erreur serveur.";
+    });
+}
     </script>
 
 <?php endif; ?>
 
 </body>
 </html>
+
