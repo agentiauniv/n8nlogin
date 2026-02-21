@@ -4,8 +4,7 @@ session_start();
 /* ============================== CONFIGURATION SUPABASE ================================= */
 
 $project_url = "https://uhqqzlpaybcyxrepisgi.supabase.co";
-$api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocXF6bHBheWJjeXhyZXBpc2dpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDg0MDI3OCwiZXhwIjoyMDg2NDE2Mjc4fQ.zgY2AsO71vrf5V1lWW0J35nUtut1qUvfvGTRAHFRz7Y";
-
+$api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocXF6bHBheWJjeXhyZXBpc2dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4NDAyNzgsImV4cCI6MjA4NjQxNjI3OH0.LNQMIQs7euI7-4MMJWU_maqT6WdXq6lWuueCtF3kE24";
 
 /* ============================== LOGIN SUPABASE ================================= */
 
@@ -100,64 +99,63 @@ if (isset($_GET["logout"])) {
     <h3>Agent IA</h3>
 
     <input type="text" id="question" placeholder="Posez votre question..." style="width:300px;">
-    <button onclick="envoyerMessage()">Envoyer</button>
+    <button onclick="sendQuestion()">Envoyer</button>
 
-    <div id="response" style="margin-top:20px;"></div>
+    <div id="response" style="margin-top:20px; font-weight:bold;"></div>
 
     <script>
-    async function envoyerMessage() {
+        function sendQuestion() {
 
-        const message = document.getElementById("question").value;
+            let question = document.getElementById("question").value;
 
-        if (!message) {
-            alert("Veuillez écrire une question");
-            return;
-        }
+            if (!question) {
+                document.getElementById("response").innerText = "Veuillez entrer une question.";
+                return;
+            }
 
-        try {
-            const response = await fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
+            fetch("https://n8n-9-dtnb.onrender.com/webhook-test/student-log", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    message: message,
-                    student_id: "<?php echo $_SESSION['student_id']; ?>"
+                    question: question,
+                    student_id: "<?php echo $_SESSION["student_id"]; ?>"
                 })
-            });
+            })
+           .then(response => response.text()) // on récupère brut
+    .then(text => {
 
-            const data = await response.json();
+        console.log("Texte reçu :", text);
 
-            console.log("Réponse reçue :", data);
+        let data;
 
-            const container = document.getElementById("response");
-            container.innerHTML = "";
-
-            if (data.imageUrl) {
-                const img = document.createElement("img");
-                img.src = data.imageUrl;
-                img.style.width = "600px";
-                img.style.marginTop = "20px";
-                container.appendChild(img);
-            } 
-            else if (data.message) {
-                container.innerHTML = data.message;
-            } 
-            else {
-                container.innerHTML = "❌ Aucune réponse reçue.";
-            }
-
-        } catch (error) {
-            console.error("Erreur :", error);
-            document.getElementById("response").innerHTML = "❌ Erreur serveur.";
+        try {
+            data = JSON.parse(text); // on convertit en JSON
+        } catch (e) {
+            document.getElementById("response").innerText = text;
+            return;
         }
-    }
+
+        if (data.imageUrl) {
+            document.getElementById("response").innerHTML =
+                "<img src='" + data.imageUrl + "' width='900' style='margin-top:20px; border:2px solid #ccc;'>";
+        } else {
+            document.getElementById("response").innerText =
+                "Image non trouvée.";
+        }
+
+    })
+    .catch(error => {
+        document.getElementById("response").innerText =
+            "Erreur serveur.";
+    });
+}
     </script>
 
 <?php endif; ?>
 
 </body>
 </html>
-
 
 
