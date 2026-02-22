@@ -137,10 +137,10 @@ if (isset($_GET["logout"])) {
             return;
         }
 
-        if (data.imageUrl) {
-            document.getElementById("response").innerHTML =
-                "<img src='" + data.imageUrl + "' width='900' style='margin-top:20px; border:2px solid #ccc;'>";
-        } else {
+        if (data.image_url) {
+    document.getElementById("response").innerHTML =
+        "<img src='" + data.image_url + "' width='900' style='margin-top:20px; border:2px solid #ccc;'>";
+} else {
             document.getElementById("response").innerText =
                 "Image non trouvée.";
         }
@@ -157,5 +157,6 @@ if (isset($_GET["logout"])) {
 
 </body>
 </html>
+
 
 
