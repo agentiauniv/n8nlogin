@@ -137,9 +137,9 @@ if (isset($_GET["logout"])) {
             return;
         }
 
-        if (data.image_url) {
+      if (data.image) {
     document.getElementById("response").innerHTML =
-        "<img src='" + data.image_url + "' width='900' style='margin-top:20px; border:2px solid #ccc;'>";
+        "<img src='" + data.image + "' width='900' style='margin-top:20px; border:2px solid #ccc;'>";
 } else {
             document.getElementById("response").innerText =
                 "Image non trouvée.";
@@ -157,6 +157,7 @@ if (isset($_GET["logout"])) {
 
 </body>
 </html>
+
 
 
 
