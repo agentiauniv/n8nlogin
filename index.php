@@ -113,7 +113,7 @@ if (isset($_GET["logout"])) {
                 return;
             }
 
-            fetch("https://n8n-9-dtnb.onrender.com/webhook-tes/agentia",{
+            fetch("https://n8n-9-dtnb.onrender.com/webhook-test/agentia",{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -157,6 +157,7 @@ if (isset($_GET["logout"])) {
 
 </body>
 </html>
+
 
 
 
